@@ -1,0 +1,54 @@
+[gd_scene load_steps=9 format=3 uid="uid://dkxagwpqrulok"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_c78w3"]
+[ext_resource type="Script" path="res://enemy.gd" id="1_tuvhi"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_kk8fe"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0hi6o"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_qbw3n"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_dpxhr"]
+radius = 7.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_31mnp"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_v8ed3"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 6)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("WorldBoundaryShape3D_kk8fe")
+
+[node name="Enemy" type="RigidBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0.572194, 0)
+script = ExtResource("1_tuvhi")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemy"]
+shape = SubResource("BoxShape3D_0hi6o")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy"]
+mesh = SubResource("BoxMesh_qbw3n")
+
+[node name="Area3D" type="Area3D" parent="Enemy"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemy/Area3D"]
+shape = SubResource("CylinderShape3D_dpxhr")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.11678, 0)
+script = ExtResource("1_c78w3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape3D_31mnp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("CapsuleMesh_v8ed3")
+
+[connection signal="body_entered" from="Enemy/Area3D" to="Enemy" method="_on_area_3d_body_entered"]
